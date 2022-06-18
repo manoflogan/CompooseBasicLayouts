@@ -22,7 +22,9 @@ import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -30,13 +32,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -44,16 +47,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
-import com.codelab.basiclayouts.ui.theme.typography
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +105,7 @@ fun AlignYourBodyElement(
             contentScale = ContentScale.Crop,
         )
         Text(text = stringResource(text),
-            style = MaterialTheme.typography.h3,
+            style = MaterialTheme.typography.body1,
             modifier = Modifier.paddingFromBaseline(top = 24.dp, bottom = 8.dp)
         )
     }
@@ -135,16 +135,23 @@ fun FavoriteCollectionCard(
                 style = MaterialTheme.typography.h3
             )
         }
-
     }
 }
 
 // Step: Align your body row - Arrangements
 @Composable
 fun AlignYourBodyRow(
+    alignYourBodyElements: List<DrawableStringPair>,
     modifier: Modifier = Modifier
 ) {
     // Implement composable here
+    LazyRow(modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)) {
+        items(alignYourBodyElements) { item ->
+            AlignYourBodyElement(drawable = item.drawable, text = item.text)
+        }
+    }
 }
 
 // Step: Favorite collections grid - LazyGrid
@@ -179,6 +186,10 @@ private fun SootheBottomNavigation(modifier: Modifier = Modifier) {
 @Composable
 fun MySootheApp() {
     // Implement composable here
+    Column() {
+        SearchBar()
+        AlignYourBodyRow(alignYourBodyElements = alignYourBodyData)
+    }
 }
 
 private val alignYourBodyData = listOf(
@@ -199,7 +210,7 @@ private val favoriteCollectionsData = listOf(
     R.drawable.fc6_nightly_wind_down to R.string.fc6_nightly_wind_down
 ).map { DrawableStringPair(it.first, it.second) }
 
-private data class DrawableStringPair(
+data class DrawableStringPair(
     @DrawableRes val drawable: Int,
     @StringRes val text: Int
 )
@@ -214,10 +225,9 @@ fun SearchBarPreview() {
 @Composable
 fun AlignYourBodyElementPreview() {
     MySootheTheme {
-        AlignYourBodyElement(
-            modifier = Modifier.padding(8.dp),
-            R.drawable.ab1_inversions,
-            R.string.ab1_inversions
+        AlignYourBodyRow(
+            alignYourBodyData,
+            modifier = Modifier
         )
     }
 }
@@ -243,7 +253,9 @@ fun FavoriteCollectionsGridPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun AlignYourBodyRowPreview() {
-    MySootheTheme { AlignYourBodyRow() }
+    MySootheTheme { AlignYourBodyRow(
+        alignYourBodyData
+    ) }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
