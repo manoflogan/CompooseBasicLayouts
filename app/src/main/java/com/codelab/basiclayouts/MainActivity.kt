@@ -46,6 +46,7 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -255,7 +256,13 @@ private fun SootheBottomNavigation(modifier: Modifier = Modifier) {
 // Step: MySoothe App - Scaffold
 @Composable
 fun MySootheApp() {
-    HomeScreen()
+    Scaffold(
+        bottomBar = {
+            SootheBottomNavigation()
+        }
+    ) { padding ->
+        HomeScreen(modifier = Modifier.padding(padding))
+    }
 }
 
 private val alignYourBodyData = listOf(
@@ -323,17 +330,19 @@ fun FavoriteCollectionsGridPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun AlignYourBodyRowPreview() {
-    MySootheTheme { AlignYourBodyRow(
-        alignYourBodyData
-    ) }
+    MySootheTheme {
+        AlignYourBodyRow(alignYourBodyData)
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2)
 @Composable
 fun HomeSectionPreview() {
-    MySootheTheme { HomeSection(R.string.align_your_body) {
-        AlignYourBodyRow(alignYourBodyData)
-    } }
+    MySootheTheme {
+        HomeSection(R.string.align_your_body) {
+            AlignYourBodyRow(alignYourBodyData)
+        }
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF0EAE2, heightDp = 180)
